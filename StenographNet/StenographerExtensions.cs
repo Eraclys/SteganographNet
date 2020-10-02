@@ -6,22 +6,21 @@ namespace StenographNet
 {
     public static class StenographerExtensions
     {
-        public static void EmbedMessage<T>(this IStenographer<T> stenographer, T target, string message) where T : class
+        public static void Embed<T>(this IStenographer<T> stenographer, T target, byte[] data) where T : class
         {
-            var messageData = Encoding.UTF8.GetBytes(message);
             var targetCapacity = stenographer.CalculateBitCapacity(target) / 8;
-            var requiredCapacity = sizeof(int) + messageData.Length;
+            var requiredCapacity = sizeof(int) + data.Length;
 
             if (requiredCapacity > targetCapacity)
             {
                 throw new StenographException($"The target does not have enough storage capacity, required:{requiredCapacity} bytes, available: {targetCapacity} bytes");
             }
-
+            
             using var memoryStream = new MemoryStream();
             using var binaryWriter = new BinaryWriter(memoryStream);
 
-            binaryWriter.Write(messageData.Length);
-            binaryWriter.Write(messageData);
+            binaryWriter.Write(data.Length);
+            binaryWriter.Write(data);
             binaryWriter.Flush();
 
             memoryStream.Seek(0, SeekOrigin.Begin);
@@ -31,7 +30,7 @@ namespace StenographNet
             stenographer.Embed(target, bitReader);
         }
 
-        public static string ExtractMessage<T>(this IStenographer<T> stenographer, T target) where T : class
+        public static byte[] Extract<T>(this IStenographer<T> stenographer, T target) where T : class
         {
             using var memoryStream = new MemoryStream();
             using var bitWriter = new BitWriter(memoryStream);
@@ -43,9 +42,17 @@ namespace StenographNet
             using var binaryReader = new BinaryReader(memoryStream);
 
             var messageSize = binaryReader.ReadInt32();
-            var messageData = binaryReader.ReadBytes(messageSize);
+            return binaryReader.ReadBytes(messageSize);
+        }
 
-            return Encoding.UTF8.GetString(messageData);
+        public static void EmbedMessage<T>(this IStenographer<T> stenographer, T target, string message) where T : class
+        {
+            stenographer.Embed(target, Encoding.UTF8.GetBytes(message));
+        }
+
+        public static string ExtractMessage<T>(this IStenographer<T> stenographer, T target) where T : class
+        {
+            return Encoding.UTF8.GetString(stenographer.Extract(target));
         }
     }
 }

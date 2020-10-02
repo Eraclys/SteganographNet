@@ -14,6 +14,16 @@ namespace StenographNet
             stenograph.Strategy.Extract(stenograph.Value, bitWriter);
         }
 
+        public static void EmbedBytes<T>(this Stenograph<T> stenograph, byte[] data) where T : class
+        {
+            stenograph.Strategy.EmbedBytes(stenograph.Value, data);
+        }
+
+        public static byte[] ExtractBytes<T>(this Stenograph<T> stenograph) where T : class
+        {
+            return stenograph.Strategy.ExtractBytes(stenograph.Value);
+        }
+        
         public static void EmbedMessage<T>(this Stenograph<T> stenograph, string message) where T : class
         {
             stenograph.Strategy.EmbedMessage(stenograph.Value, message);
