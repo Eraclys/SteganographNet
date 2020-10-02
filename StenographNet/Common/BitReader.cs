@@ -6,17 +6,16 @@ namespace StenographNet.Common
     {
         readonly Stream _stream;
         int _currentBitIndex;
-        byte _currentByte;
-        int _position;
+        int _currentByte;
+        bool _isAtEndOfStream;
 
         public BitReader(Stream stream)
         {
             _stream = stream;
             _currentBitIndex = 8;
         }
-
-        public virtual long PayloadSizeInBits => _stream.Length * 8;
-        public virtual long RemainingBits => PayloadSizeInBits - _position;
+        
+        public virtual bool IsAtEndOfStream => _isAtEndOfStream;
 
         public virtual byte Read(byte size)
         {
@@ -33,8 +32,6 @@ namespace StenographNet.Common
                 }
             }
             
-            _position += size;
-
             return (byte)value;
         }
 
@@ -43,9 +40,15 @@ namespace StenographNet.Common
             if (_currentBitIndex == 8)
             {
                 var r = _stream.ReadByte();
-                if (r == -1) return false;
+
+                if (r == -1)
+                {
+                    _isAtEndOfStream = true;
+                    return false;
+                }
+
                 _currentBitIndex = 0;
-                _currentByte = (byte)r;
+                _currentByte = r;
             }
 
             var value = (_currentByte & (1 << _currentBitIndex)) > 0;

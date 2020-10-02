@@ -22,6 +22,9 @@ namespace StenographNet.Stenographers
 
         public byte Embed(byte target, BitReader bitReader)
         {
+            if (bitReader.IsAtEndOfStream)
+                return target;
+
             return target.ReplaceTail(bitReader.Read(_bitsToKeep), _bitsToKeep);
         }
 

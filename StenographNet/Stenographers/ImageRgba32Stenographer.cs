@@ -32,6 +32,9 @@ namespace StenographNet.Stenographers
 
         public Image<Rgba32> Embed(Image<Rgba32> target, BitReader bitReader)
         {
+            if (bitReader.IsAtEndOfStream)
+                return target;
+
             for (var y = 0; y < target.Height; y++)
             {
                 var pixelRowSpan = target.GetPixelRowSpan(y);

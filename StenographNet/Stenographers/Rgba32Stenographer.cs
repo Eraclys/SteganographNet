@@ -21,7 +21,7 @@ namespace StenographNet.Stenographers
         
         public Rgba32 Embed(Rgba32 target, BitReader bitReader)
         {
-            if (bitReader.RemainingBits == 0)
+            if (bitReader.IsAtEndOfStream)
                 return target;
 
             if (target.A == 0)
