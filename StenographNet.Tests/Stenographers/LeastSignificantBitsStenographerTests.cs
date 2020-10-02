@@ -11,7 +11,7 @@ namespace StenographNet.Tests.Stenographers
     {
         public class OneBitStenographer
         {
-            readonly IStenographer<byte> _sut;
+            readonly IRefStenographer<byte> _sut;
 
             public OneBitStenographer()
             {
@@ -25,32 +25,32 @@ namespace StenographNet.Tests.Stenographers
             [InlineData("00000000", "00000001", "00000001")]
             [InlineData("01010101", "00000000", "01010100")]
             [InlineData("01010101", "00000001", "01010101")]
-            public void ShouldBeAbleEmbedAndExtractPayload(string target, string inject, string expected)
+            public void ShouldBeAbleEmbedAndExtractPayload(string targetBinaryString, string payloadBinaryString, string expectedBinaryString)
             {
-                var toEmbed = ByteExtensions.FromBinaryString(target).First();
-                using var payload =  ByteExtensions.FromBinaryString(inject).ToStream();
+                var target = ByteExtensions.FromBinaryString(targetBinaryString).First();
+                using var payload =  ByteExtensions.FromBinaryString(payloadBinaryString).ToStream();
 
-                var byteWithPayload = _sut.Embed(toEmbed, new BitReader(payload));
+                _sut.Embed(ref target, new BitReader(payload));
 
-                byteWithPayload.ToBinaryString().Should().Be(expected);
+                target.ToBinaryString().Should().Be(expectedBinaryString);
 
                 using var outputStream = new MemoryStream();
 
                 var payloadWriter = new BitWriter(outputStream);
 
-                _sut.Extract(byteWithPayload, payloadWriter);
+                _sut.Extract(target, payloadWriter);
 
                 payloadWriter.Flush();
 
                 var actualPayload = outputStream.ToArray().First();
 
-                actualPayload.ToBinaryString().Should().Be(inject);
+                actualPayload.ToBinaryString().Should().Be(payloadBinaryString);
             }
         }
 
         public class TwoBitStenographer
         {
-            readonly IStenographer<byte> _sut;
+            readonly IRefStenographer<byte> _sut;
 
             public TwoBitStenographer()
             {
@@ -66,26 +66,26 @@ namespace StenographNet.Tests.Stenographers
             [InlineData("00000000", "00000001", "00000001")]
             [InlineData("00000000", "00000010", "00000010")]
             [InlineData("00000000", "00000011", "00000011")]
-            public void ShouldBeAbleEmbedAndExtractPayload(string target, string inject, string expected)
+            public void ShouldBeAbleEmbedAndExtractPayload(string targetBinaryString, string payloadBinaryString, string expectedBinaryString)
             {
-                var toEmbed = ByteExtensions.FromBinaryString(target).First();
-                using var payload = ByteExtensions.FromBinaryString(inject).ToStream();
+                var target = ByteExtensions.FromBinaryString(targetBinaryString).First();
+                using var payload = ByteExtensions.FromBinaryString(payloadBinaryString).ToStream();
 
-                var byteWithPayload = _sut.Embed(toEmbed, new BitReader(payload));
+                _sut.Embed(ref target, new BitReader(payload));
 
-                byteWithPayload.ToBinaryString().Should().Be(expected);
+                target.ToBinaryString().Should().Be(expectedBinaryString);
 
                 using var outputStream = new MemoryStream();
 
                 var payloadWriter = new BitWriter(outputStream);
 
-                _sut.Extract(byteWithPayload, payloadWriter);
+                _sut.Extract(target, payloadWriter);
 
                 payloadWriter.Flush();
 
                 var actualPayload = outputStream.ToArray().First();
 
-                actualPayload.ToBinaryString().Should().Be(inject);
+                actualPayload.ToBinaryString().Should().Be(payloadBinaryString);
             }
         }
     }

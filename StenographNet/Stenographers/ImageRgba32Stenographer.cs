@@ -6,11 +6,13 @@ namespace StenographNet.Stenographers
 {
     public class ImageRgba32Stenographer : IStenographer<Image<Rgba32>>
     {
-        readonly IStenographer<Rgba32> _rgba32Stenographer;
+        public static readonly ImageRgba32Stenographer Default = new ImageRgba32Stenographer();
 
-        public ImageRgba32Stenographer(byte bitsPerChannel, ColorChannel colorChannelsToUse)
+        readonly IRefStenographer<Rgba32> _rgba32Stenographer;
+
+        public ImageRgba32Stenographer(IRefStenographer<Rgba32> rgba32Stenographer = null)
         {
-            _rgba32Stenographer = new Rgba32Stenographer(bitsPerChannel, colorChannelsToUse);
+            _rgba32Stenographer = rgba32Stenographer ?? Rgba32Stenographer.Default;
         }
 
         public long CalculateBitCapacity(Image<Rgba32> target)
@@ -30,10 +32,10 @@ namespace StenographNet.Stenographers
             return totalCapacity;
         }
 
-        public Image<Rgba32> Embed(Image<Rgba32> target, BitReader bitReader)
+        public void Embed(Image<Rgba32> target, BitReader bitReader)
         {
             if (bitReader.IsAtEndOfStream)
-                return target;
+                return;
 
             for (var y = 0; y < target.Height; y++)
             {
@@ -41,11 +43,9 @@ namespace StenographNet.Stenographers
 
                 for (var x = 0; x < target.Width; x++)
                 {
-                    pixelRowSpan[x] = _rgba32Stenographer.Embed(pixelRowSpan[x], bitReader);
+                    _rgba32Stenographer.Embed(ref pixelRowSpan[x], bitReader);
                 }
             }
-
-            return target;
         }
 
         public void Extract(Image<Rgba32> target, BitWriter bitWriter)

@@ -4,9 +4,9 @@ namespace StenographNet.PerformanceTests
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static void Main()
         {
-            var summary = BenchmarkRunner.Run<ImageRgba32StenographerBenchmarks>();
+            BenchmarkRunner.Run<ImageRgba32StenographerBenchmarks>();
         }
     }
 }

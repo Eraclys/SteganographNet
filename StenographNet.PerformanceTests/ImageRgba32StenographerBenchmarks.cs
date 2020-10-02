@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Text;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Diagnostics.Windows.Configs;
 using SixLabors.ImageSharp;
@@ -21,9 +20,9 @@ namespace StenographNet.PerformanceTests
         public ImageRgba32StenographerBenchmarks()
         {
             _image = Image.Load<Rgba32>("resources/images/drawing.png");
-            _data = GenerateData();
+            _data = File.ReadAllBytes("resources/data/LoremIpsum.txt");
 
-            _stenographer = new ImageRgba32Stenographer(1, ColorChannel.All);
+            _stenographer = ImageRgba32Stenographer.Default;
         }
         
         [Benchmark]
@@ -48,11 +47,6 @@ namespace StenographNet.PerformanceTests
             payloadWriter.Flush();
 
             return stream.Length;
-        }
-
-        static byte[] GenerateData()
-        {
-            return Encoding.Default.GetBytes("this is a hidden message");
         }
         
         public void Dispose()

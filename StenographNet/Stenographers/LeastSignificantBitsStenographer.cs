@@ -3,7 +3,7 @@ using StenographNet.Common;
 
 namespace StenographNet.Stenographers
 {
-    public class LeastSignificantBitsStenographer : IStenographer<byte>
+    public class LeastSignificantBitsStenographer : IRefStenographer<byte>
     {
         readonly byte _bitsToKeep;
 
@@ -20,12 +20,12 @@ namespace StenographNet.Stenographers
             return _bitsToKeep;
         }
 
-        public byte Embed(byte target, BitReader bitReader)
+        public void Embed(ref byte target, BitReader bitReader)
         {
             if (bitReader.IsAtEndOfStream)
-                return target;
+                return;
 
-            return target.ReplaceTail(bitReader.Read(_bitsToKeep), _bitsToKeep);
+            target = target.ReplaceTail(bitReader.Read(_bitsToKeep), _bitsToKeep);
         }
 
         public void Extract(byte target, BitWriter bitWriter)
