@@ -6,7 +6,6 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.PixelFormats;
 using StenographNet.Common;
-using StenographNet.Payload;
 using StenographNet.Stenographers;
 using Xunit;
 using Xunit.Abstractions;
@@ -40,7 +39,7 @@ namespace StenographNet.Tests.Stenographers
             using var image = Image.Load<Rgba32>(inputPath);
             using var payload = Encoding.Default.GetBytes(message).ToStream();
 
-            _sut.Embed(image, new PayloadReader(payload));
+            _sut.Embed(image, new BitReader(payload));
 
             image.SaveAsPng(outputPath, new PngEncoder
             {
@@ -51,7 +50,7 @@ namespace StenographNet.Tests.Stenographers
             using var imageWithPayload = Image.Load<Rgba32>(outputPath);
             using var outputStream = new MemoryStream();
             
-            var payloadWriter = new PayloadWriter(outputStream);
+            var payloadWriter = new BitWriter(outputStream);
 
             _sut.Extract(imageWithPayload, payloadWriter);
 

@@ -19,50 +19,50 @@ namespace StenographNet.Stenographers
 
         public long CalculateBitCapacity(Rgba32 target) => target.A == 0 ? MaxCapacity : _lsbCapacity;
         
-        public Rgba32 Embed(Rgba32 target, IPayloadReader payloadReader)
+        public Rgba32 Embed(Rgba32 target, BitReader bitReader)
         {
-            if (payloadReader.RemainingBits == 0)
+            if (bitReader.RemainingBits == 0)
                 return target;
 
             if (target.A == 0)
             {
-                target.R = payloadReader.Read(8);
-                target.G = payloadReader.Read(8);
-                target.B = payloadReader.Read(8);
+                target.R = bitReader.Read(8);
+                target.G = bitReader.Read(8);
+                target.B = bitReader.Read(8);
 
                 return target;
             }
 
             if (_colorChannelsToUse.Has(ColorChannel.R))
-                target.R = _lsbStenographer.Embed(target.R, payloadReader);
+                target.R = _lsbStenographer.Embed(target.R, bitReader);
 
             if (_colorChannelsToUse.Has(ColorChannel.G))
-                target.G = _lsbStenographer.Embed(target.G, payloadReader);
+                target.G = _lsbStenographer.Embed(target.G, bitReader);
 
             if (_colorChannelsToUse.Has(ColorChannel.B))
-                target.B = _lsbStenographer.Embed(target.B, payloadReader);
+                target.B = _lsbStenographer.Embed(target.B, bitReader);
 
             return target;
         }
 
-        public void Extract(Rgba32 target, IPayloadWriter payloadWriter)
+        public void Extract(Rgba32 target, BitWriter bitWriter)
         {
             if (target.A == 0)
             {
-                payloadWriter.Write(target.R, 8);
-                payloadWriter.Write(target.G, 8);
-                payloadWriter.Write(target.B, 8);
+                bitWriter.Write(target.R, 8);
+                bitWriter.Write(target.G, 8);
+                bitWriter.Write(target.B, 8);
                 return;
             }
 
             if (_colorChannelsToUse.Has(ColorChannel.R))
-                _lsbStenographer.Extract(target.R, payloadWriter);
+                _lsbStenographer.Extract(target.R, bitWriter);
 
             if (_colorChannelsToUse.Has(ColorChannel.G))
-                _lsbStenographer.Extract(target.G, payloadWriter);
+                _lsbStenographer.Extract(target.G, bitWriter);
 
             if (_colorChannelsToUse.Has(ColorChannel.B))
-                _lsbStenographer.Extract(target.B, payloadWriter);
+                _lsbStenographer.Extract(target.B, bitWriter);
         }
     }
 }

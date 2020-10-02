@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
@@ -7,18 +6,6 @@ namespace StenographNet.Common
 {
     public static class ByteExtensions
     {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte TruncateTail(this byte value, byte size)
-        {
-            return (byte) ((value >> size) << size);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte TruncateHead(this byte value, byte size)
-        {
-            return (byte)((value << size) >> size);
-        }
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte ReplaceTail(this byte value, byte newTailData, byte tailSize)
         {
@@ -58,29 +45,6 @@ namespace StenographNet.Common
 
                 index++;
             }
-
-            return result;
-        }
-
-        public static byte[] ConvertToBytes(this BitArray bits)
-        {
-            // Make sure we have enough space allocated even when number of bits is not a multiple of 8
-            var bytes = new byte[(bits.Length - 1) / 8 + 1];
-            bits.CopyTo(bytes, 0);
-            return bytes;
-        }
-
-        public static bool[] ConvertByteToBoolArray(byte b)
-        {
-            // prepare the return result
-            var result = new bool[8];
-
-            // check each bit in the byte. if 1 set to true, if 0 set to false
-            for (var i = 0; i < 8; i++)
-                result[i] = (b & (1 << i)) != 0;
-
-            // reverse the array
-            Array.Reverse(result);
 
             return result;
         }

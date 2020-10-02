@@ -2,7 +2,6 @@ using System.IO;
 using System.Linq;
 using FluentAssertions;
 using StenographNet.Common;
-using StenographNet.Payload;
 using StenographNet.Stenographers;
 using Xunit;
 
@@ -31,13 +30,13 @@ namespace StenographNet.Tests.Stenographers
                 var toEmbed = ByteExtensions.FromBinaryString(target).First();
                 using var payload =  ByteExtensions.FromBinaryString(inject).ToStream();
 
-                var byteWithPayload = _sut.Embed(toEmbed, new PayloadReader(payload));
+                var byteWithPayload = _sut.Embed(toEmbed, new BitReader(payload));
 
                 byteWithPayload.ToBinaryString().Should().Be(expected);
 
                 using var outputStream = new MemoryStream();
 
-                var payloadWriter = new PayloadWriter(outputStream);
+                var payloadWriter = new BitWriter(outputStream);
 
                 _sut.Extract(byteWithPayload, payloadWriter);
 
@@ -72,13 +71,13 @@ namespace StenographNet.Tests.Stenographers
                 var toEmbed = ByteExtensions.FromBinaryString(target).First();
                 using var payload = ByteExtensions.FromBinaryString(inject).ToStream();
 
-                var byteWithPayload = _sut.Embed(toEmbed, new PayloadReader(payload));
+                var byteWithPayload = _sut.Embed(toEmbed, new BitReader(payload));
 
                 byteWithPayload.ToBinaryString().Should().Be(expected);
 
                 using var outputStream = new MemoryStream();
 
-                var payloadWriter = new PayloadWriter(outputStream);
+                var payloadWriter = new BitWriter(outputStream);
 
                 _sut.Extract(byteWithPayload, payloadWriter);
 

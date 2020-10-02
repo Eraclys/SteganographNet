@@ -30,7 +30,7 @@ namespace StenographNet.Stenographers
             return totalCapacity;
         }
 
-        public Image<Rgba32> Embed(Image<Rgba32> target, IPayloadReader payloadReader)
+        public Image<Rgba32> Embed(Image<Rgba32> target, BitReader bitReader)
         {
             for (var y = 0; y < target.Height; y++)
             {
@@ -38,14 +38,14 @@ namespace StenographNet.Stenographers
 
                 for (var x = 0; x < target.Width; x++)
                 {
-                    pixelRowSpan[x] = _rgba32Stenographer.Embed(pixelRowSpan[x], payloadReader);
+                    pixelRowSpan[x] = _rgba32Stenographer.Embed(pixelRowSpan[x], bitReader);
                 }
             }
 
             return target;
         }
 
-        public void Extract(Image<Rgba32> target, IPayloadWriter payloadWriter)
+        public void Extract(Image<Rgba32> target, BitWriter bitWriter)
         {
             for (var y = 0; y < target.Height; y++)
             {
@@ -53,7 +53,7 @@ namespace StenographNet.Stenographers
 
                 for (var x = 0; x < target.Width; x++)
                 {
-                    _rgba32Stenographer.Extract(pixelRowSpan[x], payloadWriter);
+                    _rgba32Stenographer.Extract(pixelRowSpan[x], bitWriter);
                 }
             }
         }

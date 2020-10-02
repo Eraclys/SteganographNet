@@ -6,7 +6,6 @@ using BenchmarkDotNet.Diagnostics.Windows.Configs;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using StenographNet.Common;
-using StenographNet.Payload;
 using StenographNet.Stenographers;
 
 namespace StenographNet.PerformanceTests
@@ -35,14 +34,14 @@ namespace StenographNet.PerformanceTests
         {
             using var stream = new MemoryStream(_data);
 
-            _stenographer.Embed(_image, new PayloadReader(stream));
+            _stenographer.Embed(_image, new BitReader(stream));
         }
 
         [Benchmark]
         public long Extract()
         {
             using var stream = new MemoryStream();
-            var payloadWriter = new PayloadWriter(stream);
+            var payloadWriter = new BitWriter(stream);
 
             _stenographer.Extract(_image, payloadWriter);
 

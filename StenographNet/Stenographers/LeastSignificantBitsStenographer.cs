@@ -20,14 +20,14 @@ namespace StenographNet.Stenographers
             return _bitsToKeep;
         }
 
-        public byte Embed(byte target, IPayloadReader payloadReader)
+        public byte Embed(byte target, BitReader bitReader)
         {
-            return target.ReplaceTail(payloadReader.Read(_bitsToKeep), _bitsToKeep);
+            return target.ReplaceTail(bitReader.Read(_bitsToKeep), _bitsToKeep);
         }
 
-        public void Extract(byte target, IPayloadWriter payloadWriter)
+        public void Extract(byte target, BitWriter bitWriter)
         {
-            payloadWriter.Write(target, _bitsToKeep);
+            bitWriter.Write(target, _bitsToKeep);
         }
     }
 }

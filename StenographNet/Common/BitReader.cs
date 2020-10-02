@@ -1,25 +1,24 @@
 ﻿using System.IO;
-using StenographNet.Common;
 
-namespace StenographNet.Payload
+namespace StenographNet.Common
 {
-    public class PayloadReader : IPayloadReader
+    public class BitReader
     {
         readonly Stream _stream;
         int _currentBitIndex;
         byte _currentByte;
         int _position;
 
-        public PayloadReader(Stream stream)
+        public BitReader(Stream stream)
         {
             _stream = stream;
             _currentBitIndex = 8;
         }
 
-        public long PayloadSizeInBits => _stream.Length * 8;
-        public long RemainingBits => PayloadSizeInBits - _position;
+        public virtual long PayloadSizeInBits => _stream.Length * 8;
+        public virtual long RemainingBits => PayloadSizeInBits - _position;
 
-        public byte Read(byte size)
+        public virtual byte Read(byte size)
         {
             var data = new bool[size];
 
