@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 namespace StenographNet.Common
@@ -29,26 +28,7 @@ namespace StenographNet.Common
 
             return bytes;
         }
-
-        public static byte ConvertBoolArrayToByte(this IReadOnlyCollection<bool> source)
-        {
-            byte result = 0;
-            // This assumes the array never contains more than 8 elements!
-            var index = 8 - source.Count;
-
-            // Loop through the array
-            foreach (var b in source)
-            {
-                // if the element is 'true' set the bit at that position
-                if (b)
-                    result |= (byte)(1 << (7 - index));
-
-                index++;
-            }
-
-            return result;
-        }
-
+        
         public static int GetSetBitsCount(this int value)
         {
             var v = (uint)value;

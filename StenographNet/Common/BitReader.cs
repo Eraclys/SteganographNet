@@ -20,18 +20,22 @@ namespace StenographNet.Common
 
         public virtual byte Read(byte size)
         {
-            var data = new bool[size];
+            var value = 0;
 
             for (var i = 0; i < size; i++)
             {
-                data[size - 1 - i] = ReadBit();
+                var bitValue = ReadBit();
+
+                if (bitValue)
+                {
+                    var bitMask = 1 << i;
+                    value |= bitMask;
+                }
             }
-
-            var asByte = data.ConvertBoolArrayToByte();
-
+            
             _position += size;
 
-            return asByte;
+            return (byte)value;
         }
 
         bool ReadBit()
