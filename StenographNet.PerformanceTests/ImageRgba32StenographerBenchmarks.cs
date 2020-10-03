@@ -5,6 +5,7 @@ using BenchmarkDotNet.Diagnostics.Windows.Configs;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using StenographNet.Common;
+using StenographNet.PayloadAccumulators;
 using StenographNet.Stenographers;
 
 namespace StenographNet.PerformanceTests
@@ -39,14 +40,14 @@ namespace StenographNet.PerformanceTests
         [Benchmark]
         public long Extract()
         {
-            using var stream = new MemoryStream();
-            var payloadWriter = new BitWriter(stream);
+            var accumulator = new PayloadAccumulator();
+            var payloadWriter = new BitWriter(accumulator);
 
             _stenographer.Extract(_image, payloadWriter);
 
             payloadWriter.Flush();
 
-            return stream.Length;
+            return accumulator.Values.Count;
         }
         
         public void Dispose()

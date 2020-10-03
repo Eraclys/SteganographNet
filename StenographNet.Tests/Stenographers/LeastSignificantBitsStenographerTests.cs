@@ -1,7 +1,7 @@
-using System.IO;
 using System.Linq;
 using FluentAssertions;
 using StenographNet.Common;
+using StenographNet.PayloadAccumulators;
 using StenographNet.Stenographers;
 using Xunit;
 
@@ -34,15 +34,15 @@ namespace StenographNet.Tests.Stenographers
 
                 target.ToBinaryString().Should().Be(expectedBinaryString);
 
-                using var outputStream = new MemoryStream();
+                var accumulator = new PayloadAccumulator();
 
-                var payloadWriter = new BitWriter(outputStream);
+                var payloadWriter = new BitWriter(accumulator);
 
                 _sut.Extract(target, payloadWriter);
 
                 payloadWriter.Flush();
 
-                var actualPayload = outputStream.ToArray().First();
+                var actualPayload = accumulator.Values.First();
 
                 actualPayload.ToBinaryString().Should().Be(payloadBinaryString);
             }
@@ -75,15 +75,15 @@ namespace StenographNet.Tests.Stenographers
 
                 target.ToBinaryString().Should().Be(expectedBinaryString);
 
-                using var outputStream = new MemoryStream();
+                var accumulator = new PayloadAccumulator();
 
-                var payloadWriter = new BitWriter(outputStream);
+                var payloadWriter = new BitWriter(accumulator);
 
                 _sut.Extract(target, payloadWriter);
 
                 payloadWriter.Flush();
 
-                var actualPayload = outputStream.ToArray().First();
+                var actualPayload = accumulator.Values.First();
 
                 actualPayload.ToBinaryString().Should().Be(payloadBinaryString);
             }
