@@ -1,4 +1,5 @@
-﻿using StenographNet.Common;
+﻿using System.IO;
+using StenographNet.Common;
 
 namespace StenographNet
 {
@@ -12,6 +13,21 @@ namespace StenographNet
         public static void Extract<T>(this Stenograph<T> stenograph, BitWriter bitWriter) where T : class
         {
             stenograph.Strategy.Extract(stenograph.Value, bitWriter);
+        }
+
+        public static void EmbedStream<T>(this Stenograph<T> stenograph, Stream dataStream) where T : class
+        {
+            stenograph.Strategy.EmbedStream(stenograph.Value, dataStream);
+        }
+
+        public static Stream ExtractStream<T>(this Stenograph<T> stenograph) where T : class
+        {
+            return stenograph.Strategy.ExtractStream(stenograph.Value);
+        }
+
+        public static void ExtractToStream<T>(this Stenograph<T> stenograph, Stream outputStream) where T : class
+        {
+            stenograph.Strategy.ExtractToStream(stenograph.Value, outputStream);
         }
 
         public static void EmbedBytes<T>(this Stenograph<T> stenograph, byte[] data) where T : class

@@ -7,10 +7,10 @@ namespace StenographNet
 {
     public static class StenographerExtensions
     {
-        public static void EmbedBytes<T>(this IStenographer<T> stenographer, T target, byte[] data) where T : class
+        public static void EmbedStream<T>(this IStenographer<T> stenographer, T target, Stream dataStream) where T : class
         {
             var targetCapacity = stenographer.CalculateBitCapacity(target) / 8;
-            var requiredCapacity = sizeof(int) + data.Length;
+            var requiredCapacity = sizeof(int) + dataStream.Length;
 
             if (requiredCapacity > targetCapacity)
             {
@@ -20,15 +20,38 @@ namespace StenographNet
             using var memoryStream = new MemoryStream();
             using var binaryWriter = new BinaryWriter(memoryStream);
 
-            binaryWriter.Write((long)data.Length);
-            binaryWriter.Write(data);
+            binaryWriter.Write(dataStream.Length);
             binaryWriter.Flush();
+            dataStream.CopyTo(memoryStream);
 
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             var bitReader = new BitReader(memoryStream);
 
             stenographer.Embed(target, bitReader);
+        }
+        
+        public static Stream ExtractStream<T>(this IStenographer<T> stenographer, T target) where T : class
+        {
+            var outputStream = new MemoryStream();
+
+            stenographer.ExtractToStream(target, outputStream);
+
+            return outputStream;
+        }
+
+        public static void ExtractToStream<T>(this IStenographer<T> stenographer, T target, Stream outputStream) where T : class
+        {
+            var accumulator = new FixedSizeStreamAccumulator(outputStream);
+            var bitWriter = new BitWriter(accumulator);
+
+            stenographer.Extract(target, bitWriter);
+        }
+
+        public static void EmbedBytes<T>(this IStenographer<T> stenographer, T target, byte[] data) where T : class
+        {
+            using var dataStream = new MemoryStream(data);
+            stenographer.EmbedStream(target, dataStream);
         }
 
         public static byte[] ExtractBytes<T>(this IStenographer<T> stenographer, T target) where T : class
