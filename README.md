@@ -1,2 +1,2 @@
-# StenographNet
+# SteganographNet
 WIP
