@@ -1,18 +1,25 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace SteganographNet.Common
 {
     public class BitReader
     {
         readonly Stream _stream;
+        readonly byte[] _contentLengthBuffer;
         int _currentBitIndex;
         int _currentByte;
         bool _isAtEndOfStream;
+        int _contentLengthIndex;
 
-        public BitReader(Stream stream)
+        public BitReader(Stream stream, bool includeLengthHeader = true)
         {
+            if (includeLengthHeader && !stream.CanSeek)
+                throw new SteganographException("Stream must be seek-able");
+
             _stream = stream;
             _currentBitIndex = 8;
+            _contentLengthBuffer = includeLengthHeader ? BitConverter.GetBytes(stream.Length) : Array.Empty<byte>();
         }
         
         public virtual bool IsAtEndOfStream => _isAtEndOfStream;
@@ -34,12 +41,12 @@ namespace SteganographNet.Common
             
             return (byte)value;
         }
-
-        bool ReadBit()
+        
+        protected virtual bool ReadBit()
         {
             if (_currentBitIndex == 8)
             {
-                var r = _stream.ReadByte();
+                var r = ReadByte();
 
                 if (r == -1)
                 {
@@ -55,6 +62,13 @@ namespace SteganographNet.Common
             _currentBitIndex++;
 
             return value;
+        }
+
+        protected virtual int ReadByte()
+        {
+            return _contentLengthIndex < _contentLengthBuffer.Length 
+                ? _contentLengthBuffer[_contentLengthIndex++] 
+                : _stream.ReadByte();
         }
     }
 }

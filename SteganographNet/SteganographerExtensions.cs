@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Text;
 using SteganographNet.Common;
-using SteganographNet.PayloadAccumulators;
 
 namespace SteganographNet
 {
@@ -17,21 +16,12 @@ namespace SteganographNet
                 throw new SteganographException($"The target does not have enough storage capacity, required:{requiredCapacity} bytes, available: {targetCapacity} bytes");
             }
             
-            using var memoryStream = new MemoryStream();
-            using var binaryWriter = new BinaryWriter(memoryStream);
-
-            binaryWriter.Write(dataStream.Length);
-            binaryWriter.Flush();
-            dataStream.CopyTo(memoryStream);
-
-            memoryStream.Seek(0, SeekOrigin.Begin);
-
-            var bitReader = new BitReader(memoryStream);
+            var bitReader = new BitReader(dataStream);
 
             steganographer.Embed(target, bitReader);
         }
         
-        public static Stream ExtractStream<T>(this ISteganographer<T> steganographer, T target) where T : class
+        public static MemoryStream ExtractStream<T>(this ISteganographer<T> steganographer, T target) where T : class
         {
             var outputStream = new MemoryStream();
 
@@ -42,8 +32,7 @@ namespace SteganographNet
 
         public static void ExtractToStream<T>(this ISteganographer<T> steganographer, T target, Stream outputStream) where T : class
         {
-            var accumulator = new FixedSizeStreamAccumulator(outputStream);
-            var bitWriter = new BitWriter(accumulator);
+            var bitWriter = new BitWriter(outputStream);
 
             steganographer.Extract(target, bitWriter);
         }
@@ -56,12 +45,8 @@ namespace SteganographNet
 
         public static byte[] ExtractBytes<T>(this ISteganographer<T> steganographer, T target) where T : class
         {
-            var accumulator = new FixedSizeByteArrayAccumulator();
-            var bitWriter = new BitWriter(accumulator);
-
-            steganographer.Extract(target, bitWriter);
-
-            return accumulator.Payload;
+            using var outputStream = steganographer.ExtractStream(target);
+            return outputStream.ToArray();
         }
 
         public static void EmbedMessage<T>(this ISteganographer<T> steganographer, T target, string message) where T : class

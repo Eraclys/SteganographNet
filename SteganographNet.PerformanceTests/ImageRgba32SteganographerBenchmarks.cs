@@ -5,7 +5,6 @@ using BenchmarkDotNet.Diagnostics.Windows.Configs;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SteganographNet.Common;
-using SteganographNet.PayloadAccumulators;
 using SteganographNet.Steganographers;
 
 namespace SteganographNet.PerformanceTests
@@ -40,14 +39,14 @@ namespace SteganographNet.PerformanceTests
         [Benchmark]
         public long Extract()
         {
-            var accumulator = new PayloadAccumulator();
-            var payloadWriter = new BitWriter(accumulator);
+            using var outputStream = new MemoryStream();
+            var payloadWriter = new BitWriter(outputStream);
 
             _steganographer.Extract(_image, payloadWriter);
 
             payloadWriter.Flush();
 
-            return accumulator.Values.Count;
+            return outputStream.Length;
         }
         
         public void Dispose()

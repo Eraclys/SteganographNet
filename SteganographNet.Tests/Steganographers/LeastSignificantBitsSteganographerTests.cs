@@ -1,7 +1,7 @@
+using System.IO;
 using System.Linq;
 using FluentAssertions;
 using SteganographNet.Common;
-using SteganographNet.PayloadAccumulators;
 using SteganographNet.Steganographers;
 using Xunit;
 
@@ -30,19 +30,18 @@ namespace SteganographNet.Tests.Steganographers
                 var target = ByteExtensions.FromBinaryString(targetBinaryString).First();
                 using var payload =  ByteExtensions.FromBinaryString(payloadBinaryString).ToStream();
 
-                _sut.Embed(ref target, new BitReader(payload));
+                _sut.Embed(ref target, new BitReader(payload, includeLengthHeader: false));
 
                 target.ToBinaryString().Should().Be(expectedBinaryString);
-
-                var accumulator = new PayloadAccumulator();
-
-                var payloadWriter = new BitWriter(accumulator);
+                
+                using var outputStream = new MemoryStream();
+                var payloadWriter = new BitWriter(outputStream, contentIncludesLengthHeader: false);
 
                 _sut.Extract(target, payloadWriter);
 
                 payloadWriter.Flush();
 
-                var actualPayload = accumulator.Values.First();
+                var actualPayload = outputStream.ToArray().First();
 
                 actualPayload.ToBinaryString().Should().Be(payloadBinaryString);
             }
@@ -71,19 +70,18 @@ namespace SteganographNet.Tests.Steganographers
                 var target = ByteExtensions.FromBinaryString(targetBinaryString).First();
                 using var payload = ByteExtensions.FromBinaryString(payloadBinaryString).ToStream();
 
-                _sut.Embed(ref target, new BitReader(payload));
+                _sut.Embed(ref target, new BitReader(payload, includeLengthHeader: false));
 
                 target.ToBinaryString().Should().Be(expectedBinaryString);
-
-                var accumulator = new PayloadAccumulator();
-
-                var payloadWriter = new BitWriter(accumulator);
+                
+                using var outputStream = new MemoryStream();
+                var payloadWriter = new BitWriter(outputStream, contentIncludesLengthHeader: false);
 
                 _sut.Extract(target, payloadWriter);
 
                 payloadWriter.Flush();
 
-                var actualPayload = accumulator.Values.First();
+                var actualPayload = outputStream.ToArray().First();
 
                 actualPayload.ToBinaryString().Should().Be(payloadBinaryString);
             }
