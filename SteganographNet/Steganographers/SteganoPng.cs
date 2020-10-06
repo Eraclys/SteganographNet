@@ -16,22 +16,22 @@ namespace SteganographNet.Steganographers
         };
 
         SteganoPng(Image<Rgba32> value, ISteganographer<Image<Rgba32>> strategy) 
-            : base(value, strategy)
+            : base(value, strategy ?? DefaultStrategy)
         {
         }
 
-        public static async Task<SteganoPng> Load(Stream stream)
+        public static async Task<SteganoPng> Load(Stream stream, ISteganographer<Image<Rgba32>> strategy = null)
         {
             var image = await Image.LoadAsync<Rgba32>(stream);
 
-            return new SteganoPng(image, DefaultStrategy);
+            return new SteganoPng(image, strategy);
         }
 
-        public static async Task<SteganoPng> Load(string path)
+        public static async Task<SteganoPng> Load(string path, ISteganographer<Image<Rgba32>> strategy = null)
         {
             var image = await Image.LoadAsync<Rgba32>(path);
 
-            return new SteganoPng(image, DefaultStrategy);
+            return new SteganoPng(image, strategy);
         }
         
         public Task Save(string path)
