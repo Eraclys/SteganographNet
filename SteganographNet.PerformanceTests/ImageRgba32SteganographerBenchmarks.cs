@@ -4,7 +4,6 @@ using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Diagnostics.Windows.Configs;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using SteganographNet.Common;
 using SteganographNet.Steganographers;
 
 namespace SteganographNet.PerformanceTests
@@ -15,42 +14,37 @@ namespace SteganographNet.PerformanceTests
     {
         readonly ISteganographer<Image<Rgba32>> _steganographer;
         readonly Image<Rgba32> _image;
-        readonly byte[] _data;
+        readonly Image<Rgba32> _imageWithMessage;
+        readonly string _message;
 
         public ImageRgba32SteganographerBenchmarks()
         {
             _image = Image.Load<Rgba32>("resources/images/drawing.png");
-            _data = File.ReadAllBytes("resources/data/LoremIpsum.txt");
+            _imageWithMessage = Image.Load<Rgba32>("resources/images/drawing.png");
+            _message = File.ReadAllText("resources/data/TenThousandWords.txt");
 
             _steganographer = ImageRgba32Steganographer.Default;
+            _steganographer.EmbedMessage(_imageWithMessage, _message);
         }
         
         [Benchmark]
         public long CalculateBitCapacity() => _steganographer.CalculateBitCapacity(_image);
         
         [Benchmark]
-        public void Embed()
+        public void EmbedMessage()
         {
-            using var stream = new MemoryStream(_data);
-
-            _steganographer.Embed(_image, new BitReader(stream));
+            _steganographer.EmbedMessage(_image, _message);
         }
 
         [Benchmark]
-        public long Extract()
+        public long ExtractMessage()
         {
-            using var outputStream = new MemoryStream();
-            var payloadWriter = new BitWriter(outputStream);
-
-            _steganographer.Extract(_image, payloadWriter);
-
-            payloadWriter.Flush();
-
-            return outputStream.Length;
+            return _steganographer.ExtractMessage(_imageWithMessage).Length;
         }
         
         public void Dispose()
         {
+            _imageWithMessage?.Dispose();
             _image?.Dispose();
         }
     }

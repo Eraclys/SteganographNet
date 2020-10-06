@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\Data\LoremIpsum.txt" />
+    <None Remove="Resources\Data\TenThousandWords.txt" />
     <None Remove="Resources\Images\drawing.png" />
     <None Remove="Resources\Images\eclipse.png" />
     <None Remove="Resources\Images\tranquility.png" />
@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Resources\Data\LoremIpsum.txt">
+    <Content Include="Resources\Data\TenThousandWords.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Images\drawing.png">

@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Text;
 using SteganographNet.Common;
 
 namespace SteganographNet
@@ -26,6 +25,8 @@ namespace SteganographNet
             var outputStream = new MemoryStream();
 
             steganographer.ExtractToStream(target, outputStream);
+
+            outputStream.Seek(0, SeekOrigin.Begin);
 
             return outputStream;
         }
