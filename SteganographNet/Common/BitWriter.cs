@@ -25,6 +25,8 @@ namespace SteganographNet.Common
             _contentLengthBuffer = contentIncludesLengthHeader ? new byte[sizeof(long)] : Array.Empty<byte>();
         }
         
+        public virtual bool IsFinished => !_continue;
+
         public virtual void Write(byte target, byte bitsToKeep)
         {
             if (!_continue)

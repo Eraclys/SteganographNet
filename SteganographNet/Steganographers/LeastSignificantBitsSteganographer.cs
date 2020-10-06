@@ -20,17 +20,24 @@ namespace SteganographNet.Steganographers
             return _bitsToKeep;
         }
 
-        public void Embed(ref byte target, BitReader bitReader)
+        public bool Embed(ref byte target, BitReader bitReader)
         {
             if (bitReader.IsAtEndOfStream)
-                return;
+                return false;
 
             target = target.ReplaceTail(bitReader.Read(_bitsToKeep), _bitsToKeep);
+
+            return !bitReader.IsAtEndOfStream;
         }
 
-        public void Extract(byte target, BitWriter bitWriter)
+        public bool Extract(byte target, BitWriter bitWriter)
         {
+            if (bitWriter.IsFinished)
+                return false;
+
             bitWriter.Write(target, _bitsToKeep);
+
+            return !bitWriter.IsFinished;
         }
     }
 }
