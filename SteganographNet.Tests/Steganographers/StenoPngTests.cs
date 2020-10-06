@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using FluentAssertions;
 using SteganographNet.Steganographers;
@@ -44,6 +45,32 @@ namespace SteganographNet.Tests.Steganographers
                 Vestibulum sem lacus, efficitur id ultrices quis, hendrerit et nisi. 
                 In ornare erat nec tortor tempus.";
 
+            image.EmbedMessage(message);
+
+            await image.Save(outputPath);
+
+            using var imageWithPayload = await SteganoPng.Load(outputPath);
+
+            var actualMessage = imageWithPayload.ExtractMessage();
+
+            actualMessage.Should().Be(message);
+        }
+
+
+        [Theory]
+        [InlineData("drawing.png")]
+        [InlineData("eclipse.png")]
+        [InlineData("tranquility.png")]
+        [InlineData("transparent.png")]
+        [InlineData("white.png")]
+        public async Task ShouldBeAbleEmbedAndExtractTenThousandWords(string imageName)
+        {
+            var outputPath = $"{Environment.CurrentDirectory}/embedded-{imageName}";
+            _output.WriteLine(outputPath);
+
+            using var image = await SteganoPng.Load($"resources/images/{imageName}");
+            var message = await File.ReadAllTextAsync("resources/data/TenThousandWords.txt");
+            
             image.EmbedMessage(message);
 
             await image.Save(outputPath);
