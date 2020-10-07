@@ -7,14 +7,14 @@ namespace SteganographNet.Steganographers
     {
         public static readonly Rgba32Steganographer Default = new Rgba32Steganographer();
 
-        readonly Rgba32SteganographerOptions _options;
+        readonly ImageSteganographerOptions _options;
         readonly IRefSteganographer<byte> _lsbSteganographer;
         readonly int _lsbCapacity;
         const int MaxCapacity = 3 * 8;
 
-        public Rgba32Steganographer(Rgba32SteganographerOptions options = null)
+        public Rgba32Steganographer(ImageSteganographerOptions? options = null)
         {
-            _options = options ?? Rgba32SteganographerOptions.Default;
+            _options = options ?? ImageSteganographerOptions.Default;
 
             _lsbSteganographer = new LeastSignificantBitsSteganographer(_options.BitsPerChannel);
             _lsbCapacity = _options.BitsPerChannel * _options.ColorChannelsToUse.Count();

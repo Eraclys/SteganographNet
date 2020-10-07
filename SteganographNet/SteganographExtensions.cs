@@ -5,6 +5,11 @@ namespace SteganographNet
 {
     public static class SteganographExtensions
     {
+        public static long CapacityInBits<T>(this Steganograph<T> steganograph) where T : class
+        {
+            return steganograph.Strategy.CalculateBitCapacity(steganograph.Value);
+        }
+        
         public static void Embed<T>(this Steganograph<T> steganograph, BitReader bitReader) where T : class
         {
             steganograph.Strategy.Embed(steganograph.Value, bitReader);
