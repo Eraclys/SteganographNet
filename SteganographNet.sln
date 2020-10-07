@@ -7,7 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SteganographNet", "Steganog
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SteganographNet.Tests", "SteganographNet.Tests\SteganographNet.Tests.csproj", "{20B56688-8832-48D6-BCE7-DE28F19162CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteganographNet.PerformanceTests", "SteganographNet.PerformanceTests\SteganographNet.PerformanceTests.csproj", "{95B53027-E3D1-4D19-843E-5A5A58474FC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SteganographNet.PerformanceTests", "SteganographNet.PerformanceTests\SteganographNet.PerformanceTests.csproj", "{95B53027-E3D1-4D19-843E-5A5A58474FC9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SteganographNet.UI.ImageSteganographer", "SteganographNet.UI.ImageSteganographer\SteganographNet.UI.ImageSteganographer.csproj", "{9D8A1430-F5DD-4360-BF4A-78223213A90D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{565FC5CD-D7C0-4102-AF13-6567200EA4D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +31,10 @@ Global
 		{95B53027-E3D1-4D19-843E-5A5A58474FC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95B53027-E3D1-4D19-843E-5A5A58474FC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95B53027-E3D1-4D19-843E-5A5A58474FC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D8A1430-F5DD-4360-BF4A-78223213A90D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D8A1430-F5DD-4360-BF4A-78223213A90D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D8A1430-F5DD-4360-BF4A-78223213A90D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D8A1430-F5DD-4360-BF4A-78223213A90D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
