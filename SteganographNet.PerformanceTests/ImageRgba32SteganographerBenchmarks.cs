@@ -4,7 +4,7 @@ using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Diagnostics.Windows.Configs;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using SteganographNet.Steganographers;
+using SteganographNet.Images;
 
 namespace SteganographNet.PerformanceTests
 {

@@ -1,8 +1,7 @@
 ﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using SteganographNet.Common;
 
-namespace SteganographNet.Steganographers
+namespace SteganographNet.Images
 {
     public class ImageSteganographer<TPixel> : ISteganographer<Image<TPixel>> 
         where TPixel : unmanaged, IPixel<TPixel>

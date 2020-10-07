@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SteganographNet.UI.ImageSte
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{565FC5CD-D7C0-4102-AF13-6567200EA4D1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteganographNet.Images", "SteganographNet.Images\SteganographNet.Images.csproj", "{061290C5-878E-4A4D-BE30-A5715511DDCE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{9D8A1430-F5DD-4360-BF4A-78223213A90D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9D8A1430-F5DD-4360-BF4A-78223213A90D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9D8A1430-F5DD-4360-BF4A-78223213A90D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{061290C5-878E-4A4D-BE30-A5715511DDCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{061290C5-878E-4A4D-BE30-A5715511DDCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{061290C5-878E-4A4D-BE30-A5715511DDCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{061290C5-878E-4A4D-BE30-A5715511DDCE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

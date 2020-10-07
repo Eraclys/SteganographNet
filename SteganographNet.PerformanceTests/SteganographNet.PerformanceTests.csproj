@@ -45,6 +45,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SteganographNet.Images\SteganographNet.Images.csproj" />
     <ProjectReference Include="..\SteganographNet\SteganographNet.csproj" />
   </ItemGroup>
 

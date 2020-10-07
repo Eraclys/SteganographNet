@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace SteganographNet.Common
+namespace SteganographNet
 {
     public class BitWriter
     {

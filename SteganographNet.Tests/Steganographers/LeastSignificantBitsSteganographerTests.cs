@@ -1,7 +1,6 @@
 using System.IO;
 using System.Linq;
 using FluentAssertions;
-using SteganographNet.Common;
 using SteganographNet.Steganographers;
 using Xunit;
 
@@ -27,8 +26,8 @@ namespace SteganographNet.Tests.Steganographers
             [InlineData("01010101", "00000001", "01010101")]
             public void ShouldBeAbleEmbedAndExtractPayload(string targetBinaryString, string payloadBinaryString, string expectedBinaryString)
             {
-                var target = ByteExtensions.FromBinaryString(targetBinaryString).First();
-                using var payload =  ByteExtensions.FromBinaryString(payloadBinaryString).ToStream();
+                var target = Utils.FromBinaryString(targetBinaryString).First();
+                using var payload = Utils.FromBinaryString(payloadBinaryString).ToStream();
 
                 _sut.Embed(ref target, new BitReader(payload, includeLengthHeader: false));
 
@@ -67,8 +66,8 @@ namespace SteganographNet.Tests.Steganographers
             [InlineData("00000000", "00000011", "00000011")]
             public void ShouldBeAbleEmbedAndExtractPayload(string targetBinaryString, string payloadBinaryString, string expectedBinaryString)
             {
-                var target = ByteExtensions.FromBinaryString(targetBinaryString).First();
-                using var payload = ByteExtensions.FromBinaryString(payloadBinaryString).ToStream();
+                var target = Utils.FromBinaryString(targetBinaryString).First();
+                using var payload = Utils.FromBinaryString(payloadBinaryString).ToStream();
 
                 _sut.Embed(ref target, new BitReader(payload, includeLengthHeader: false));
 

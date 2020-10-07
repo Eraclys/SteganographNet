@@ -1,7 +1,6 @@
-﻿using System;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 
-namespace SteganographNet.Common
+namespace SteganographNet
 {
     public static class ByteExtensions
     {
@@ -9,24 +8,6 @@ namespace SteganographNet.Common
         public static byte ReplaceTail(this byte value, byte newTailData, byte tailSize)
         {
             return (byte) (((value >> tailSize) << tailSize) | newTailData);
-        }
-
-        public static string ToBinaryString(this byte value)
-        {
-            return Convert.ToString(value, 2).PadLeft(8, '0');
-        }
-
-        public static byte[] FromBinaryString(string value)
-        {
-            var numOfBytes = value.Length / 8;
-            var bytes = new byte[numOfBytes];
-
-            for (var i = 0; i < numOfBytes; ++i)
-            {
-                bytes[i] = Convert.ToByte(value.Substring(8 * i, 8), 2);
-            }
-
-            return bytes;
         }
         
         public static int GetSetBitsCount(this int value)

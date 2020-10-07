@@ -1,9 +1,9 @@
 ﻿namespace SteganographNet
 {
-    public interface ISteganographer<T> where T : class
+    public interface IRefSteganographer<T> where T : struct
     {
         long CalculateBitCapacity(T target);
-        bool Embed(T target, BitReader bitReader);
+        bool Embed(ref T target, BitReader bitReader);
         bool Extract(T target, BitWriter bitWriter);
     }
 }

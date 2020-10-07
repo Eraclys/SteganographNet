@@ -4,14 +4,18 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using SteganographNet.Steganographers;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SteganographNet.Images;
+using Image = SixLabors.ImageSharp.Image;
 
 namespace SteganographNet.UI.ImageSteganographer
 {
     public partial class Main : Form
     {
-        SteganoPng? _steganograph;
-        string _filepath;
+        string? _filepath;
+        ISteganographer<Image<Rgba32>> _steganographer;
+        Image<Rgba32> _image;
 
         public Main()
         {
@@ -25,11 +29,12 @@ namespace SteganographNet.UI.ImageSteganographer
 
             _openImageFileDialog.Filter = "Png Images|*.png|Jpeg Images|*.jpg";
             _saveImageFileDialog.Filter = "Png|*.png";
+            _steganographer = ImageRgba32Steganographer.Default;
         }
 
         async void SaveAsToolStripMenuItem_Click(object? sender, EventArgs e)
         {
-            if (_steganograph == null)
+            if (_image == null)
             {
                 MessageBox.Show("Select an image first");
                 return;
@@ -37,24 +42,24 @@ namespace SteganographNet.UI.ImageSteganographer
 
             if (_saveImageFileDialog.ShowDialog() == DialogResult.OK)
             {
-                await _steganograph.Save(_saveImageFileDialog.FileName);
+                await _image.SaveAsStegoAsync(_saveImageFileDialog.FileName);
             }
         }
 
         async void SaveToolStripMenuItemOnClick(object? sender, EventArgs e)
         {
-            if (_steganograph == null)
+            if (_image == null)
             {
                 MessageBox.Show("Select an image first");
                 return;
             }
 
-            await _steganograph.Save(_filepath);
+            await _image.SaveAsStegoAsync(_filepath);
         }
 
         void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
-            _steganograph?.Dispose();
+            _image?.Dispose();
         }
 
         async void OpenToolStripMenuItemOnClick(object? sender, EventArgs e)
@@ -62,11 +67,11 @@ namespace SteganographNet.UI.ImageSteganographer
             if (_openImageFileDialog.ShowDialog() == DialogResult.OK)
             {
                 _filepath = _openImageFileDialog.FileName;
-                _steganograph = await SteganoPng.Load(_filepath);
+                _image = await Image.LoadAsync<Rgba32>(_filepath);
                 _labelName.Text = $"Name: {Path.GetFileName(_filepath)}";
-                _labelWidth.Text = $"Width: {_steganograph.Value.Width}";
-                _labelHeight.Text = $"Height: {_steganograph.Value.Height}";
-                _labelMaxCapacity.Text = $"Storage Capacity: {_steganograph.CapacityInBits()/8} Bytes";
+                _labelWidth.Text = $"Width: {_image.Width}";
+                _labelHeight.Text = $"Height: {_image.Height}";
+                _labelMaxCapacity.Text = $"Storage Capacity: {_steganographer.CalculateBitCapacity(_image) /8} Bytes";
                 _textBoxMessage.Text = string.Empty;
                 await ShowImage();
             }
@@ -76,24 +81,24 @@ namespace SteganographNet.UI.ImageSteganographer
 
         void ButtonExtract_Click(object sender, EventArgs e)
         {
-            if (_steganograph == null)
+            if (_image == null)
             {
                 MessageBox.Show("Select an image first");
                 return;
             }
 
-            _textBoxMessage.Text = _steganograph.ExtractMessage();
+            _textBoxMessage.Text = _steganographer.ExtractMessage(_image);
         }
 
         void ButtonEmbed_Click(object sender, EventArgs e)
         {
-            if (_steganograph == null)
+            if (_image == null)
             {
                 MessageBox.Show("Select an image first");
                 return;
             }
 
-            _steganograph.EmbedMessage(_textBoxMessage.Text);
+            _steganographer.EmbedMessage(_image, _textBoxMessage.Text);
         }
 
         void TextBoxMessage_TextChanged(object sender, EventArgs e)
@@ -102,24 +107,14 @@ namespace SteganographNet.UI.ImageSteganographer
 
             _groupBoxMessage.Text = $"Message ({messageSize} Bytes):";
         }
-
-        async Task EmbedMessage()
-        {
-            if (_steganograph == null)
-                return;
-
-            _steganograph.EmbedMessage(_textBoxMessage.Text);
-
-            await ShowImage();
-        }
-
+        
         async Task ShowImage()
         {
-            if (_steganograph == null)
+            if (_image == null)
                 return;
 
             await using var memoryStream = new MemoryStream();
-            await _steganograph.Save(memoryStream);
+            await _image.SaveAsStegoAsync(memoryStream);
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             pictureBox1.Image = new Bitmap(memoryStream);
@@ -153,7 +148,7 @@ namespace SteganographNet.UI.ImageSteganographer
 
         async void ButtonEmbedFile_Click(object sender, EventArgs e)
         {
-            if (_steganograph == null)
+            if (_image == null)
             {
                 MessageBox.Show("Select an image first");
                 return;
@@ -161,12 +156,12 @@ namespace SteganographNet.UI.ImageSteganographer
 
             await using var inputStream = File.OpenRead(_textBoxSourceFile.Text);
 
-            _steganograph.EmbedStream(inputStream);
+            _steganographer.EmbedStream(_image, inputStream);
         }
 
         async void ButtonExtractFile_Click(object sender, EventArgs e)
         {
-            if (_steganograph == null)
+            if (_image == null)
             {
                 MessageBox.Show("Select an image first");
                 return;
@@ -174,7 +169,7 @@ namespace SteganographNet.UI.ImageSteganographer
             
             await using var outputStream = File.Create(_textBoxTargetFile.Text);
 
-            _steganograph.ExtractToStream(outputStream);
+            _steganographer.ExtractToStream(_image, outputStream);
         }
     }
 }

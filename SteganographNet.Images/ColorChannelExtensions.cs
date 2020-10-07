@@ -1,17 +1,7 @@
-﻿using System;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 
-namespace SteganographNet.Common
+namespace SteganographNet.Images
 {
-    [Flags]
-    public enum ColorChannel
-    {
-        R = 1,
-        G = 2,
-        B = 4,
-        All = R | G | B
-    }
-
     public static class ColorChannelExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

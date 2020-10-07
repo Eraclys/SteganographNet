@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using System.Text;
-using SteganographNet.Common;
 
 namespace SteganographNet
 {

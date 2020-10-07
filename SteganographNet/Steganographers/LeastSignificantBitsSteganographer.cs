@@ -1,5 +1,4 @@
 ﻿using System;
-using SteganographNet.Common;
 
 namespace SteganographNet.Steganographers
 {

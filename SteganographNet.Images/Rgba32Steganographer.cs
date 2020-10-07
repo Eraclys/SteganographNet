@@ -1,20 +1,20 @@
 ﻿using SixLabors.ImageSharp.PixelFormats;
-using SteganographNet.Common;
+using SteganographNet.Steganographers;
 
-namespace SteganographNet.Steganographers
+namespace SteganographNet.Images
 {
     public class Rgba32Steganographer : IRefSteganographer<Rgba32>
     {
         public static readonly Rgba32Steganographer Default = new Rgba32Steganographer();
 
-        readonly ImageSteganographerOptions _options;
+        readonly Rgba32SteganographerOptions _options;
         readonly IRefSteganographer<byte> _lsbSteganographer;
         readonly int _lsbCapacity;
         const int MaxCapacity = 3 * 8;
 
-        public Rgba32Steganographer(ImageSteganographerOptions? options = null)
+        public Rgba32Steganographer(Rgba32SteganographerOptions? options = null)
         {
-            _options = options ?? ImageSteganographerOptions.Default;
+            _options = options ?? Rgba32SteganographerOptions.Default;
 
             _lsbSteganographer = new LeastSignificantBitsSteganographer(_options.BitsPerChannel);
             _lsbCapacity = _options.BitsPerChannel * _options.ColorChannelsToUse.Count();

@@ -8,6 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Common\**" />
+    <EmbeddedResource Remove="Common\**" />
+    <None Remove="Common\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Resources\Data\TenThousandWords.txt" />
     <None Remove="Resources\Images\drawing.png" />
     <None Remove="Resources\Images\eclipse.png" />
@@ -46,11 +52,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SteganographNet.Images\SteganographNet.Images.csproj" />
     <ProjectReference Include="..\SteganographNet\SteganographNet.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Common\" />
   </ItemGroup>
 
 </Project>

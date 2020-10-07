@@ -1,6 +1,4 @@
-﻿using SteganographNet.Common;
-
-namespace SteganographNet.Steganographers
+﻿namespace SteganographNet.Steganographers
 {
     public class SteganographerConverter<TInput, TOutput> : ISteganographer<TInput> 
         where TInput : class 

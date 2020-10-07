@@ -427,7 +427,6 @@
         private System.Windows.Forms.GroupBox _groupBoxFile;
         private System.Windows.Forms.Label labelSourceFileLocation;
         private System.Windows.Forms.TextBox _textBoxSourceFile;
-        private System.Windows.Forms.Button buttonSelectFile;
         private System.Windows.Forms.Button buttonEmbedFile;
         private System.Windows.Forms.TextBox _textBoxTargetFile;
         private System.Windows.Forms.Button buttonSelectTargetFile;

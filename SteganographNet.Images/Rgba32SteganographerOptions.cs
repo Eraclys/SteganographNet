@@ -1,10 +1,8 @@
-﻿using SteganographNet.Common;
-
-namespace SteganographNet.Steganographers
+﻿namespace SteganographNet.Images
 {
-    public class ImageSteganographerOptions
+    public class Rgba32SteganographerOptions
     {
-        public static readonly ImageSteganographerOptions Default = new ImageSteganographerOptions();
+        public static readonly Rgba32SteganographerOptions Default = new Rgba32SteganographerOptions();
 
         public byte BitsPerChannel { get; set; } = 2;
         public ColorChannel ColorChannelsToUse { get; set; } = ColorChannel.All;

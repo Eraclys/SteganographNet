@@ -2,7 +2,9 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using FluentAssertions;
-using SteganographNet.Steganographers;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SteganographNet.Images;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -11,10 +13,12 @@ namespace SteganographNet.Tests.Steganographers
     public class ImageRgba32SteganographerTests
     {
         readonly ITestOutputHelper _output;
+        readonly ISteganographer<Image<Rgba32>> _sut;
         
         public ImageRgba32SteganographerTests(ITestOutputHelper output)
         {
             _output = output;
+            _sut = ImageRgba32Steganographer.Default;
         }
 
         [Theory]
@@ -48,15 +52,15 @@ namespace SteganographNet.Tests.Steganographers
             var outputPath = $"{Environment.CurrentDirectory}/embedded-{imageName}";
             _output.WriteLine(outputPath);
 
-            using var image = await SteganoPng.Load($"resources/images/{imageName}");
+            using var image = await Image.LoadAsync<Rgba32>($"resources/images/{imageName}");
 
-            image.EmbedMessage(message);
+            _sut.EmbedMessage(image, message);
 
-            await image.Save(outputPath);
+            await image.SaveAsStegoAsync(outputPath);
 
-            using var imageWithPayload = await SteganoPng.Load(outputPath);
+            using var imageWithPayload = await Image.LoadAsync<Rgba32>(outputPath);
 
-            var actualMessage = imageWithPayload.ExtractMessage();
+            var actualMessage = _sut.ExtractMessage(imageWithPayload);
 
             actualMessage.Should().Be(message);
         }
