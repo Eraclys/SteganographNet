@@ -10,15 +10,15 @@ using Xunit.Abstractions;
 
 namespace SteganographNet.Tests.Steganographers
 {
-    public class ImageRgba32SteganographerTests
+    public class ImageRgba32SteganographerBuilderTests
     {
         readonly ITestOutputHelper _output;
         readonly ISteganographer<Image<Rgba32>> _sut;
         
-        public ImageRgba32SteganographerTests(ITestOutputHelper output)
+        public ImageRgba32SteganographerBuilderTests(ITestOutputHelper output)
         {
             _output = output;
-            _sut = ImageRgba32Steganographer.Default;
+            _sut = ImageRgba32SteganographerBuilder.Default;
         }
 
         [Theory]

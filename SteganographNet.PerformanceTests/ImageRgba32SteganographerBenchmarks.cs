@@ -23,7 +23,7 @@ namespace SteganographNet.PerformanceTests
             _imageWithMessage = Image.Load<Rgba32>("resources/images/drawing.png");
             _message = File.ReadAllText("resources/data/TenThousandWords.txt");
 
-            _steganographer = ImageRgba32Steganographer.Default;
+            _steganographer = ImageRgba32SteganographerBuilder.Default;
             _steganographer.EmbedMessage(_imageWithMessage, _message);
         }
         

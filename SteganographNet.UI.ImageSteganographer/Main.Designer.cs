@@ -45,6 +45,12 @@
             this._labelWidth = new System.Windows.Forms.Label();
             this._textBoxMessage = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this._comboBoxBitsPerPixel = new System.Windows.Forms.ComboBox();
+            this.labelBitsPerPixel = new System.Windows.Forms.Label();
+            this._checkBoxChannelBlue = new System.Windows.Forms.CheckBox();
+            this._checkBoxChannelGreen = new System.Windows.Forms.CheckBox();
+            this._checkBoxChannelRed = new System.Windows.Forms.CheckBox();
+            this._checkBoxAlpha = new System.Windows.Forms.CheckBox();
             this._radioButtonFile = new System.Windows.Forms.RadioButton();
             this._radioButtonMessage = new System.Windows.Forms.RadioButton();
             this.buttonEmbed = new System.Windows.Forms.Button();
@@ -141,9 +147,9 @@
             this.groupBox1.Controls.Add(this._labelMaxCapacity);
             this.groupBox1.Controls.Add(this._labelHeight);
             this.groupBox1.Controls.Add(this._labelWidth);
-            this.groupBox1.Location = new System.Drawing.Point(265, 27);
+            this.groupBox1.Location = new System.Drawing.Point(220, 27);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(225, 127);
+            this.groupBox1.Size = new System.Drawing.Size(270, 233);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Image stats";
@@ -192,20 +198,101 @@
             this._textBoxMessage.Location = new System.Drawing.Point(6, 51);
             this._textBoxMessage.Multiline = true;
             this._textBoxMessage.Name = "_textBoxMessage";
-            this._textBoxMessage.Size = new System.Drawing.Size(466, 400);
+            this._textBoxMessage.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this._textBoxMessage.Size = new System.Drawing.Size(466, 294);
             this._textBoxMessage.TabIndex = 3;
             this._textBoxMessage.TextChanged += new System.EventHandler(this.TextBoxMessage_TextChanged);
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this._comboBoxBitsPerPixel);
+            this.groupBox2.Controls.Add(this.labelBitsPerPixel);
+            this.groupBox2.Controls.Add(this._checkBoxChannelBlue);
+            this.groupBox2.Controls.Add(this._checkBoxChannelGreen);
+            this.groupBox2.Controls.Add(this._checkBoxChannelRed);
+            this.groupBox2.Controls.Add(this._checkBoxAlpha);
             this.groupBox2.Controls.Add(this._radioButtonFile);
             this.groupBox2.Controls.Add(this._radioButtonMessage);
             this.groupBox2.Location = new System.Drawing.Point(12, 27);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(244, 127);
+            this.groupBox2.Size = new System.Drawing.Size(202, 233);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Options";
+            // 
+            // _comboBoxBitsPerPixel
+            // 
+            this._comboBoxBitsPerPixel.FormattingEnabled = true;
+            this._comboBoxBitsPerPixel.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "4"});
+            this._comboBoxBitsPerPixel.Location = new System.Drawing.Point(89, 201);
+            this._comboBoxBitsPerPixel.Name = "_comboBoxBitsPerPixel";
+            this._comboBoxBitsPerPixel.Size = new System.Drawing.Size(101, 23);
+            this._comboBoxBitsPerPixel.TabIndex = 1;
+            this._comboBoxBitsPerPixel.SelectedIndexChanged += new System.EventHandler(this.StenographerOptions_Changed);
+            // 
+            // labelBitsPerPixel
+            // 
+            this.labelBitsPerPixel.AutoSize = true;
+            this.labelBitsPerPixel.Location = new System.Drawing.Point(6, 204);
+            this.labelBitsPerPixel.Name = "labelBitsPerPixel";
+            this.labelBitsPerPixel.Size = new System.Drawing.Size(77, 15);
+            this.labelBitsPerPixel.TabIndex = 1;
+            this.labelBitsPerPixel.Text = "Bits per pixel:";
+            // 
+            // _checkBoxChannelBlue
+            // 
+            this._checkBoxChannelBlue.AutoSize = true;
+            this._checkBoxChannelBlue.Checked = true;
+            this._checkBoxChannelBlue.CheckState = System.Windows.Forms.CheckState.Checked;
+            this._checkBoxChannelBlue.Location = new System.Drawing.Point(6, 171);
+            this._checkBoxChannelBlue.Name = "_checkBoxChannelBlue";
+            this._checkBoxChannelBlue.Size = new System.Drawing.Size(116, 19);
+            this._checkBoxChannelBlue.TabIndex = 1;
+            this._checkBoxChannelBlue.Text = "Use Blue channel";
+            this._checkBoxChannelBlue.UseVisualStyleBackColor = true;
+            this._checkBoxChannelBlue.CheckedChanged += new System.EventHandler(this.StenographerOptions_Changed);
+            // 
+            // _checkBoxChannelGreen
+            // 
+            this._checkBoxChannelGreen.AutoSize = true;
+            this._checkBoxChannelGreen.Checked = true;
+            this._checkBoxChannelGreen.CheckState = System.Windows.Forms.CheckState.Checked;
+            this._checkBoxChannelGreen.Location = new System.Drawing.Point(6, 146);
+            this._checkBoxChannelGreen.Name = "_checkBoxChannelGreen";
+            this._checkBoxChannelGreen.Size = new System.Drawing.Size(124, 19);
+            this._checkBoxChannelGreen.TabIndex = 1;
+            this._checkBoxChannelGreen.Text = "Use Green channel";
+            this._checkBoxChannelGreen.UseVisualStyleBackColor = true;
+            this._checkBoxChannelGreen.CheckedChanged += new System.EventHandler(this.StenographerOptions_Changed);
+            // 
+            // _checkBoxChannelRed
+            // 
+            this._checkBoxChannelRed.AutoSize = true;
+            this._checkBoxChannelRed.Checked = true;
+            this._checkBoxChannelRed.CheckState = System.Windows.Forms.CheckState.Checked;
+            this._checkBoxChannelRed.Location = new System.Drawing.Point(6, 121);
+            this._checkBoxChannelRed.Name = "_checkBoxChannelRed";
+            this._checkBoxChannelRed.Size = new System.Drawing.Size(113, 19);
+            this._checkBoxChannelRed.TabIndex = 1;
+            this._checkBoxChannelRed.Text = "Use Red channel";
+            this._checkBoxChannelRed.UseVisualStyleBackColor = true;
+            this._checkBoxChannelRed.CheckedChanged += new System.EventHandler(this.StenographerOptions_Changed);
+            // 
+            // _checkBoxAlpha
+            // 
+            this._checkBoxAlpha.AutoSize = true;
+            this._checkBoxAlpha.Checked = true;
+            this._checkBoxAlpha.CheckState = System.Windows.Forms.CheckState.Checked;
+            this._checkBoxAlpha.Location = new System.Drawing.Point(6, 96);
+            this._checkBoxAlpha.Name = "_checkBoxAlpha";
+            this._checkBoxAlpha.Size = new System.Drawing.Size(184, 19);
+            this._checkBoxAlpha.TabIndex = 1;
+            this._checkBoxAlpha.Text = "If transparent use all color bits";
+            this._checkBoxAlpha.UseVisualStyleBackColor = true;
+            this._checkBoxAlpha.CheckedChanged += new System.EventHandler(this.StenographerOptions_Changed);
             // 
             // _radioButtonFile
             // 
@@ -267,9 +354,9 @@
             this._groupBoxMessage.Controls.Add(this.buttonEmbed);
             this._groupBoxMessage.Controls.Add(this.buttonExctract);
             this._groupBoxMessage.Controls.Add(this._textBoxMessage);
-            this._groupBoxMessage.Location = new System.Drawing.Point(12, 160);
+            this._groupBoxMessage.Location = new System.Drawing.Point(12, 266);
             this._groupBoxMessage.Name = "_groupBoxMessage";
-            this._groupBoxMessage.Size = new System.Drawing.Size(478, 457);
+            this._groupBoxMessage.Size = new System.Drawing.Size(478, 351);
             this._groupBoxMessage.TabIndex = 8;
             this._groupBoxMessage.TabStop = false;
             this._groupBoxMessage.Text = "Message";
@@ -285,9 +372,9 @@
             this._groupBoxFile.Controls.Add(this.labelSourceFileLocation);
             this._groupBoxFile.Controls.Add(this.buttonSelectSourceFile);
             this._groupBoxFile.Controls.Add(this._textBoxSourceFile);
-            this._groupBoxFile.Location = new System.Drawing.Point(13, 160);
+            this._groupBoxFile.Location = new System.Drawing.Point(13, 266);
             this._groupBoxFile.Name = "_groupBoxFile";
-            this._groupBoxFile.Size = new System.Drawing.Size(478, 457);
+            this._groupBoxFile.Size = new System.Drawing.Size(478, 351);
             this._groupBoxFile.TabIndex = 7;
             this._groupBoxFile.TabStop = false;
             this._groupBoxFile.Text = "File";
@@ -376,9 +463,9 @@
             this.ClientSize = new System.Drawing.Size(1026, 629);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this._groupBoxFile);
             this.Controls.Add(this.menuStrip);
             this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this._groupBoxFile);
             this.Controls.Add(this._groupBoxMessage);
             this.MainMenuStrip = this.menuStrip;
             this.Name = "Main";
@@ -435,6 +522,12 @@
         private System.Windows.Forms.Label labelTargetFile;
         private System.Windows.Forms.OpenFileDialog _openSourceFileDialog;
         private System.Windows.Forms.SaveFileDialog _saveTargetFileDialog;
+        private System.Windows.Forms.CheckBox _checkBoxAlpha;
+        private System.Windows.Forms.CheckBox _checkBoxChannelRed;
+        private System.Windows.Forms.CheckBox _checkBoxChannelGreen;
+        private System.Windows.Forms.CheckBox _checkBoxChannelBlue;
+        private System.Windows.Forms.ComboBox _comboBoxBitsPerPixel;
+        private System.Windows.Forms.Label labelBitsPerPixel;
     }
 }
 

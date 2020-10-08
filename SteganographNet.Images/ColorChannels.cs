@@ -3,11 +3,12 @@
 namespace SteganographNet.Images
 {
     [Flags]
-    public enum ColorChannel
+    public enum ColorChannels
     {
         R = 1,
         G = 2,
         B = 4,
-        All = R | G | B
+        All = R | G | B,
+        None = 0
     }
 }

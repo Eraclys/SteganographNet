@@ -14,7 +14,7 @@ namespace SteganographNet.UI.ImageSteganographer
     public partial class Main : Form
     {
         string? _filepath;
-        ISteganographer<Image<Rgba32>> _steganographer;
+        ImageRgba32SteganographerBuilder _builder;
         Image<Rgba32> _image;
 
         public Main()
@@ -27,9 +27,12 @@ namespace SteganographNet.UI.ImageSteganographer
             _saveAsToolStripMenuItem.Click += SaveAsToolStripMenuItem_Click;
             FormClosing += Main_FormClosing;
 
+            _builder = ImageRgba32SteganographerBuilder.New();
             _openImageFileDialog.Filter = "Png Images|*.png|Jpeg Images|*.jpg";
             _saveImageFileDialog.Filter = "Png|*.png";
-            _steganographer = ImageRgba32Steganographer.Default;
+            _comboBoxBitsPerPixel.Items.Clear();
+            _comboBoxBitsPerPixel.Items.AddRange(new object[]{(byte)1, (byte)2, (byte)4 });
+            _comboBoxBitsPerPixel.SelectedIndex = 1;
         }
 
         async void SaveAsToolStripMenuItem_Click(object? sender, EventArgs e)
@@ -71,7 +74,7 @@ namespace SteganographNet.UI.ImageSteganographer
                 _labelName.Text = $"Name: {Path.GetFileName(_filepath)}";
                 _labelWidth.Text = $"Width: {_image.Width}";
                 _labelHeight.Text = $"Height: {_image.Height}";
-                _labelMaxCapacity.Text = $"Storage Capacity: {_steganographer.CalculateBitCapacity(_image) /8} Bytes";
+                _labelMaxCapacity.Text = $"Storage Capacity: {_builder.Build().CalculateBitCapacity(_image) /8} Bytes";
                 _textBoxMessage.Text = string.Empty;
                 await ShowImage();
             }
@@ -87,7 +90,7 @@ namespace SteganographNet.UI.ImageSteganographer
                 return;
             }
 
-            _textBoxMessage.Text = _steganographer.ExtractMessage(_image);
+            _textBoxMessage.Text = _builder.Build().ExtractMessage(_image);
         }
 
         void ButtonEmbed_Click(object sender, EventArgs e)
@@ -98,7 +101,7 @@ namespace SteganographNet.UI.ImageSteganographer
                 return;
             }
 
-            _steganographer.EmbedMessage(_image, _textBoxMessage.Text);
+            _builder.Build().EmbedMessage(_image, _textBoxMessage.Text);
         }
 
         void TextBoxMessage_TextChanged(object sender, EventArgs e)
@@ -156,7 +159,7 @@ namespace SteganographNet.UI.ImageSteganographer
 
             await using var inputStream = File.OpenRead(_textBoxSourceFile.Text);
 
-            _steganographer.EmbedStream(_image, inputStream);
+            _builder.Build().EmbedStream(_image, inputStream);
         }
 
         async void ButtonExtractFile_Click(object sender, EventArgs e)
@@ -169,7 +172,21 @@ namespace SteganographNet.UI.ImageSteganographer
             
             await using var outputStream = File.Create(_textBoxTargetFile.Text);
 
-            _steganographer.ExtractToStream(_image, outputStream);
+            _builder.Build().ExtractToStream(_image, outputStream);
+        }
+
+        void StenographerOptions_Changed(object sender, EventArgs e)
+        {
+            _builder
+                .BitsPerChannel((byte) _comboBoxBitsPerPixel.SelectedItem)
+                .UseAllBitsWhenPixelIsTransparent(_checkBoxAlpha.Checked)
+                .ColorChannelsToUse(
+                    _checkBoxChannelRed.Checked,
+                    _checkBoxChannelGreen.Checked,
+                    _checkBoxChannelBlue.Checked);
+
+            if (_image != null)
+                _labelMaxCapacity.Text = $"Storage Capacity: {_builder.Build().CalculateBitCapacity(_image) / 8} Bytes";
         }
     }
 }

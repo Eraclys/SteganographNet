@@ -5,16 +5,16 @@ namespace SteganographNet.Images
 {
     public class Rgba32Steganographer : IRefSteganographer<Rgba32>
     {
-        public static readonly Rgba32Steganographer Default = new Rgba32Steganographer();
+        public static readonly Rgba32Steganographer Default = new Rgba32Steganographer(new Rgba32SteganographerOptions());
 
         readonly Rgba32SteganographerOptions _options;
         readonly IRefSteganographer<byte> _lsbSteganographer;
         readonly int _lsbCapacity;
         const int MaxCapacity = 3 * 8;
 
-        public Rgba32Steganographer(Rgba32SteganographerOptions? options = null)
+        public Rgba32Steganographer(Rgba32SteganographerOptions options)
         {
-            _options = options ?? Rgba32SteganographerOptions.Default;
+            _options = options;
 
             _lsbSteganographer = new LeastSignificantBitsSteganographer(_options.BitsPerChannel);
             _lsbCapacity = _options.BitsPerChannel * _options.ColorChannelsToUse.Count();
@@ -57,14 +57,14 @@ namespace SteganographNet.Images
 
         bool LsbEmbed(ref Rgba32 target,  BitReader bitReader)
         {
-            return LsbEmbed(ColorChannel.R, ref target.R, bitReader) &&
-                   LsbEmbed(ColorChannel.G, ref target.G, bitReader) && 
-                   LsbEmbed(ColorChannel.B, ref target.B, bitReader);
+            return LsbEmbed(ColorChannels.R, ref target.R, bitReader) &&
+                   LsbEmbed(ColorChannels.G, ref target.G, bitReader) && 
+                   LsbEmbed(ColorChannels.B, ref target.B, bitReader);
         }
 
-        bool LsbEmbed(ColorChannel channel, ref byte value, BitReader bitReader)
+        bool LsbEmbed(ColorChannels channels, ref byte value, BitReader bitReader)
         {
-            if (!_options.ColorChannelsToUse.Has(channel))
+            if (!_options.ColorChannelsToUse.Has(channels))
                 return true;
 
             return _lsbSteganographer.Embed(ref value, bitReader);
@@ -85,14 +85,14 @@ namespace SteganographNet.Images
 
         bool LsbExtract(ref Rgba32 target, BitWriter bitWriter)
         {
-            return LsbExtract(ColorChannel.R, ref target.R, bitWriter) &&
-                   LsbExtract(ColorChannel.G, ref target.G, bitWriter) &&
-                   LsbExtract(ColorChannel.B, ref target.B, bitWriter);
+            return LsbExtract(ColorChannels.R, ref target.R, bitWriter) &&
+                   LsbExtract(ColorChannels.G, ref target.G, bitWriter) &&
+                   LsbExtract(ColorChannels.B, ref target.B, bitWriter);
         }
 
-        bool LsbExtract(ColorChannel channel, ref byte value, BitWriter bitWriter)
+        bool LsbExtract(ColorChannels channels, ref byte value, BitWriter bitWriter)
         {
-            if (!_options.ColorChannelsToUse.Has(channel))
+            if (!_options.ColorChannelsToUse.Has(channels))
                 return true;
 
             return _lsbSteganographer.Extract(value, bitWriter);
